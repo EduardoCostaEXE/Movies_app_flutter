@@ -3,19 +3,37 @@ import 'package:movies_app_flutter/data/movie_api.dart';
 import 'package:movies_app_flutter/service_locator.dart';
 import '../../data/models/movie.dart';
 
-class MovieListController{
+class MovieListController {
   final api = getIt<MovieApi>();
 
-  final _controller = StreamController<List<Movie>>();
-  Stream<List<Movie>>get stream => _controller.stream;
+  final _moviesController = StreamController<List<Movie>>();
+  final _genresController = StreamController<List<Genre>>();
 
-  void init(){
+  Stream<List<Movie>> get moviesStream => _moviesController.stream;
+  Stream<List<Genre>> get genresStream => _genresController.stream;
+
+  void init() {
     getMovies();
+    getGenres();
   }
 
-  Future<void> getMovies() async{
+  Future<void> getMovies() async {
     var result = await api.getMovies();
+    _moviesController.sink.add(result);
+  }
 
-    _controller.sink.add(result);
+  Future<void> getGenres() async {
+    var result = await api.getGenres();
+    _genresController.sink.add(result);
+  }
+
+  Future<void> getMoviesByGenre(int genreId) async {
+    var result = await api.getMoviesByGenre(genreId);
+    _moviesController.sink.add(result);
+  }
+
+  void dispose() {
+    _moviesController.close();
+    _genresController.close();
   }
 }
