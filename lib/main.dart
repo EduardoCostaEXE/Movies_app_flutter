@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'movie_list_page.dart';
+import 'package:movies_app_flutter/service_locator.dart';
+import 'pages/movie_list/movie_list_page.dart';
 
 void main() {
+  setupGetIt();
+
   runApp(const MyApp());
 }
 
