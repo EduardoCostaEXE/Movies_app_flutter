@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies_app_flutter/pages/movie_detail/movie_detail_page.dart';
 import '../../../data/models/movie.dart';
 
 class MovieItemWidget extends StatelessWidget {
@@ -22,7 +23,13 @@ class MovieItemWidget extends StatelessWidget {
         ),
       ),
       onTap: (){
-        print(movie.title);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder:
+                  (context) => MovieDetailPage(movie: movie),
+            )
+        );
       },
     );
   }

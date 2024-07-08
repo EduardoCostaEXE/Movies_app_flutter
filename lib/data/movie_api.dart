@@ -44,4 +44,14 @@ class MovieApi {
       .map((item) => Genre.fromJson(item))
       .toList();
   }
+
+  //Tela de detalhes
+  Future<Movie> getMovie(int movieId) async {
+    var response = await _dio.get('/movie/$movieId', queryParameters: {
+      'api_key': apiKey,
+      'language': 'pt-BR',
+    });
+
+    return Movie.fromJson(response.data);
+  }
 }

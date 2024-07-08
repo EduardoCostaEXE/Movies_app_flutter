@@ -32,16 +32,18 @@ class _MovieListPageState extends State<MovieListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Movie App'),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.search)
+          )
+        ],
       ),
       body: StreamBuilder<List<Genre>>(
         stream: controller.genresStream,
         builder: (context, genresSnapshot) {
           if (genresSnapshot.connectionState == ConnectionState.waiting) {
             return const ProgressIndicatorWidget();
-          }
-
-          if (!genresSnapshot.hasData || genresSnapshot.data!.isEmpty) {
-            return const Center(child: Text('No genres available'));
           }
 
           var genres = genresSnapshot.data!;
