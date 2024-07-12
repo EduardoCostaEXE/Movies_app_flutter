@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:movies_app_flutter/pages/movie_detail/widgets/movie_detail_about_widget.dart';
+import 'package:movies_app_flutter/pages/movie_detail/widgets/movie_detail_cover_widget.dart';
 import 'package:movies_app_flutter/pages/movie_list/widgets/genre_section_widget.dart';
 import 'package:movies_app_flutter/pages/movie_list/widgets/progress_indicator_widget.dart';
 import 'package:movies_app_flutter/service_locator.dart';
@@ -31,8 +33,6 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    var movie = widget.movie;
-
     return Scaffold(
       body: StreamBuilder<Movie>(
         initialData: widget.movie,
@@ -42,7 +42,12 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
           // if (genresSnapshot.connectionState == ConnectionState.waiting) {
           //   return const ProgressIndicatorWidget();
           // }
-          return Text(movie.title);
+          return CustomScrollView(
+            slivers: [
+              MovieDetailCoverWidget(movie: movie),
+              MovieDetailAboutWidget(movie: movie)
+            ],
+          );
         },
       ),
     );
