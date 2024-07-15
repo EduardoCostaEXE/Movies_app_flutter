@@ -45,7 +45,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
           return CustomScrollView(
             slivers: [
               MovieDetailCoverWidget(movie: movie),
-              MovieDetailAboutWidget(movie: movie),
+              MovieDetailAboutWidget(movie: movie, controller: controller),
             ],
           );
         },

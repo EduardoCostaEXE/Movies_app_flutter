@@ -1,19 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movies_app_flutter/pages/movie_detail/movie_detail_controller.dart';
 import '../../../data/models/movie.dart';
-import '../../../service_locator.dart';
 
 class MovieDetailAboutWidget extends StatelessWidget {
-  const MovieDetailAboutWidget({super.key, required this.movie});
+  const MovieDetailAboutWidget({super.key, required this.movie, required this.controller});
 
   final Movie movie;
+  final MovieDetailController controller;
 
   @override
   Widget build(BuildContext context) {
-    final controller = getIt<MovieDetailController>();
-    // final genreNames = controller.genresStream;
-
     return SliverToBoxAdapter(
       child: Container(
         padding: EdgeInsets.all(16.0),
@@ -37,11 +33,11 @@ class MovieDetailAboutWidget extends StatelessWidget {
                   child: _buildIcon(Icons.category),
                 ),
                 StreamBuilder<List<String>>(
-                    stream: controller.genresStream,
-                    builder: (context, snapshot) {
-                      var genres = snapshot.data ?? [];
-                      return Text('Genres: ${genres.join(', ')}');
-                    }
+                  stream: controller.genresStream,
+                  builder: (context, snapshot) {
+                    var genres = snapshot.data ?? [];
+                    return Text('Gêneros: ${genres.join(', ')}');
+                  },
                 ),
               ],
             ),
@@ -51,13 +47,14 @@ class MovieDetailAboutWidget extends StatelessWidget {
               style: Theme.of(context).textTheme.titleLarge,
             ),
             Text(
-                movie.overview,
-                textAlign: TextAlign.justify
-            )
+              movie.overview,
+              textAlign: TextAlign.justify,
+            ),
           ],
         ),
       ),
     );
   }
+
   Icon _buildIcon(IconData iconData) => Icon(iconData, color: Colors.amber, size: 16);
 }

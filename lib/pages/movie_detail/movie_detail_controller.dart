@@ -23,9 +23,7 @@ class MovieDetailController {
           ? movie.genreIds!.map((id) => genres[id]).where((name) => name != null).cast<String>().toList()
           : [];
       _genresSubject.add(genreNames as List<String>);
-      print('Movie loaded: ${movie.title}, Genres: ${genreNames.join(', ')}');
     } catch (error) {
-      print('Failed to load genres: $error');
       _genresSubject.addError(error);
     }
   }
