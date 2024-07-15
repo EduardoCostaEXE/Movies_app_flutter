@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class Movie {
   Movie({
     required this.id,
@@ -10,31 +12,38 @@ class Movie {
 
   final int id;
   final String title;
-  final String releaseDate;
+  final DateTime releaseDate;
   final String overview;
-  final List<int> genreIds;
+  final List<int>? genreIds;
   final String posterPath;
 
   String get fullImageUrl => 'https://image.tmdb.org/t/p/w500$posterPath';
 
-  factory Movie.fromJson(Map<String, dynamic> json) => Movie(
-    id: json['id'],
-    title: json['title'],
-    releaseDate: json['release_date'],
-    overview: json['overview'],
-    genreIds: List<int>.from(json['genre_ids']),
-    posterPath: json['poster_path'],
-  );
+  String get formattedReleaseDate => DateFormat('dd/MM/yyyy').format(releaseDate);
+
+  factory Movie.fromJson(Map<String, dynamic> json) {
+    print('Movie loaded: ${json['title']}, Genre IDs: ${json['genre_ids']}');
+    return Movie(
+      id: json['id'],
+      title: json['title'],
+      releaseDate: DateTime.parse(json['release_date']),
+      overview: json['overview'],
+      genreIds: List<int>.from(json['genre_ids']),
+      posterPath: json['poster_path'],
+    );
+  }
 }
 
 class Genre {
-  Genre({required this.id, required this.name});
-
   final int id;
   final String name;
 
-  factory Genre.fromJson(Map<String, dynamic> json) => Genre(
-    id: json['id'],
-    name: json['name'],
-  );
+  Genre({required this.id, required this.name});
+
+  factory Genre.fromJson(Map<String, dynamic> json) {
+    return Genre(
+      id: json['id'],
+      name: json['name'],
+    );
+  }
 }
