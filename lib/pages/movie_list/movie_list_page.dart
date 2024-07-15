@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:movies_app_flutter/pages/movie_list/movie_list_controller.dart';
 import 'package:movies_app_flutter/pages/movie_list/widgets/genre_section_widget.dart';
 import 'package:movies_app_flutter/pages/movie_list/widgets/progress_indicator_widget.dart';
 import 'package:movies_app_flutter/service_locator.dart';
-import '../../data/models/movie.dart';
+import 'package:movies_app_flutter/data/models/movie.dart';
+import 'movie_list_controller.dart';
 
 class MovieListPage extends StatefulWidget {
   const MovieListPage({super.key});
@@ -13,12 +13,13 @@ class MovieListPage extends StatefulWidget {
 }
 
 class _MovieListPageState extends State<MovieListPage> {
-  final controller = getIt<MovieListController>();
+  late final MovieListController controller;
 
   @override
   void initState() {
-    controller.init();
     super.initState();
+    controller = getIt<MovieListController>();
+    controller.init();
   }
 
   @override
@@ -34,8 +35,8 @@ class _MovieListPageState extends State<MovieListPage> {
         title: const Text('Movie App'),
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.search)
+              onPressed: () {},
+              icon: const Icon(Icons.search)
           )
         ],
       ),
@@ -65,7 +66,7 @@ class _MovieListPageState extends State<MovieListPage> {
                 itemCount: genres.length,
                 itemBuilder: (context, index) {
                   var genre = genres[index];
-                  var genreMovies = movies.where((m) => m.genreIds.contains(genre.id)).toList();
+                  var genreMovies = movies.where((m) => m.genreIds!.contains(genre.id)).toList();
                   return GenreSectionWidget(genre: genre.name, movies: genreMovies);
                 },
               );

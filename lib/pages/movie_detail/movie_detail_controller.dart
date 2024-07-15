@@ -1,23 +1,37 @@
-import 'dart:async';
-import 'package:movies_app_flutter/data/movie_api.dart';
-import 'package:movies_app_flutter/service_locator.dart';
+import 'package:rxdart/rxdart.dart';
 import '../../data/models/movie.dart';
+import '../../data/movie_api.dart';
+import '../../service_locator.dart';
 
 class MovieDetailController {
-  final api = getIt<MovieApi>();
-  late Movie _movie;
+  final _movieSubject = BehaviorSubject<Movie>();
+  final _genresSubject = BehaviorSubject<List<String>>();
+  final MovieApi api = getIt<MovieApi>();
 
-  final _controller = StreamController<Movie>();
-  Stream<Movie> get stream => _controller.stream;
+  Stream<Movie> get movieStream => _movieSubject.stream;
+  Stream<List<String>> get genresStream => _genresSubject.stream;
 
-  void init(Movie movie) {
-    _movie= movie;
-
-    getMovie();
+  void init(Movie movie) async {
+    _movieSubject.add(movie);
+    await _loadGenres(movie);
   }
 
-  Future<void> getMovie() async {
-    var result = await api.getMovie(_movie.id);
-    _controller.sink.add(result);
+  Future<void> _loadGenres(Movie movie) async {
+    try {
+      var genres = await api.getGenresInMovie();
+      var genreNames = movie.genreIds != null
+          ? movie.genreIds!.map((id) => genres[id]).where((name) => name != null).cast<String>().toList()
+          : [];
+      _genresSubject.add(genreNames as List<String>);
+      print('Movie loaded: ${movie.title}, Genres: ${genreNames.join(', ')}');
+    } catch (error) {
+      print('Failed to load genres: $error');
+      _genresSubject.addError(error);
+    }
+  }
+
+  void dispose() {
+    _movieSubject.close();
+    _genresSubject.close();
   }
 }

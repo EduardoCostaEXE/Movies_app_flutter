@@ -13,23 +13,18 @@ class MovieListController {
   Stream<List<Genre>> get genresStream => _genresController.stream;
 
   void init() {
-    getMovies();
-    getGenres();
+    fetchMovies();
+    fetchGenres();
   }
 
-  Future<void> getMovies() async {
+  Future<void> fetchMovies() async {
     var result = await api.getMovies();
     _moviesController.sink.add(result);
   }
 
-  Future<void> getGenres() async {
+  Future<void> fetchGenres() async {
     var result = await api.getGenres();
     _genresController.sink.add(result);
-  }
-
-  Future<void> getMoviesByGenre(int genreId) async {
-    var result = await api.getMoviesByGenre(genreId);
-    _moviesController.sink.add(result);
   }
 
   void dispose() {

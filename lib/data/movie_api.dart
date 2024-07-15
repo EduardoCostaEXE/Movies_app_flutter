@@ -9,12 +9,11 @@ class MovieApi {
   final String apiKey = '42c9e433f49c9956a59378574f5ef333';
 
   Future<List<Movie>> getMovies() async {
-    var response = await _dio
-      .get('/movie/popular', queryParameters: {
-        'api_key': apiKey,
-        'language': 'pt-BR',
-        'page': 1,
-      });
+    var response = await _dio.get('/movie/popular', queryParameters: {
+      'api_key': apiKey,
+      'language': 'pt-BR',
+      'page': 1,
+    });
 
     return (response.data['results'] as List)
       .map((item) => Movie.fromJson(item))
@@ -34,18 +33,31 @@ class MovieApi {
       .toList();
   }
 
-  Future<List<Genre>> getGenres() async {
-    var response = await _dio.get('/genre/movie/list', queryParameters: {
+  Future<Map<int, String>> getGenresInMovie() async {
+    final response = await _dio.get('/genre/movie/list', queryParameters: {
       'api_key': apiKey,
-      'language': 'pt-BR',
+      'language': 'pt-BR'
     });
 
-    return (response.data['genres'] as List)
-      .map((item) => Genre.fromJson(item))
-      .toList();
+    final List<dynamic> genres = response.data['genres'];
+    return {for (var genre in genres) genre['id']: genre['name']};
   }
 
-  //Tela de detalhes
+  Future<List<Genre>> getGenres() async {
+    final response = await _dio.get('/genre/movie/list', queryParameters: {
+      'api_key': apiKey,
+      'language': 'pt-BR'
+    });
+
+    if (response.statusCode == 200) {
+      var data = response.data;
+      List<Genre> genres = (data['genres'] as List).map((item) => Genre.fromJson(item)).toList();
+      return genres;
+    } else {
+      throw Exception('Failed to load genres');
+    }
+  }
+
   Future<Movie> getMovie(int movieId) async {
     var response = await _dio.get('/movie/$movieId', queryParameters: {
       'api_key': apiKey,

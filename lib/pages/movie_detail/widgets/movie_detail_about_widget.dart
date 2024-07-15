@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:movies_app_flutter/pages/movie_detail/movie_detail_controller.dart';
 import '../../../data/models/movie.dart';
+import '../../../service_locator.dart';
 
 class MovieDetailAboutWidget extends StatelessWidget {
   const MovieDetailAboutWidget({super.key, required this.movie});
@@ -9,6 +11,9 @@ class MovieDetailAboutWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = getIt<MovieDetailController>();
+    // final genreNames = controller.genresStream;
+
     return SliverToBoxAdapter(
       child: Container(
         padding: EdgeInsets.all(16.0),
@@ -21,12 +26,23 @@ class MovieDetailAboutWidget extends StatelessWidget {
                   padding: const EdgeInsets.only(right: 4.0),
                   child: _buildIcon(Icons.calendar_month_outlined),
                 ),
-                Text('Lançamento: ${movie.releaseDate}'),
+                Text('Lançamento: ${movie.formattedReleaseDate}'),
+              ],
+            ),
+            const SizedBox(height: 8.0),
+            Row(
+              children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 8.0, right: 4.0),
+                  padding: const EdgeInsets.only(right: 4.0),
                   child: _buildIcon(Icons.category),
                 ),
-                Text('Generos'),
+                StreamBuilder<List<String>>(
+                    stream: controller.genresStream,
+                    builder: (context, snapshot) {
+                      var genres = snapshot.data ?? [];
+                      return Text('Genres: ${genres.join(', ')}');
+                    }
+                ),
               ],
             ),
             const SizedBox(height: 16.0),

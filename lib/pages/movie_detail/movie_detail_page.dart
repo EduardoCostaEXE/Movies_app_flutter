@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app_flutter/pages/movie_detail/widgets/movie_detail_about_widget.dart';
 import 'package:movies_app_flutter/pages/movie_detail/widgets/movie_detail_cover_widget.dart';
-import 'package:movies_app_flutter/pages/movie_list/widgets/genre_section_widget.dart';
-import 'package:movies_app_flutter/pages/movie_list/widgets/progress_indicator_widget.dart';
 import 'package:movies_app_flutter/service_locator.dart';
 import '../../data/models/movie.dart';
+import '../movie_list/widgets/progress_indicator_widget.dart';
 import 'movie_detail_controller.dart';
 
 class MovieDetailPage extends StatefulWidget {
@@ -17,17 +16,18 @@ class MovieDetailPage extends StatefulWidget {
 }
 
 class _MovieDetailPageState extends State<MovieDetailPage> {
-  final controller = getIt.registerSingleton(MovieDetailController());
+  late final MovieDetailController controller;
 
   @override
   void initState() {
-    controller.init(widget.movie);
     super.initState();
+    controller = getIt<MovieDetailController>();
+    controller.init(widget.movie);
   }
 
   @override
   void dispose() {
-    getIt.unregister(instance: controller);
+    controller.dispose();
     super.dispose();
   }
 
@@ -36,16 +36,16 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
     return Scaffold(
       body: StreamBuilder<Movie>(
         initialData: widget.movie,
-        stream: controller.stream,
+        stream: controller.movieStream,
         builder: (context, genresSnapshot) {
           var movie = genresSnapshot.data!;
-          // if (genresSnapshot.connectionState == ConnectionState.waiting) {
-          //   return const ProgressIndicatorWidget();
-          // }
+          if (genresSnapshot.connectionState == ConnectionState.waiting) {
+            return const ProgressIndicatorWidget();
+          }
           return CustomScrollView(
             slivers: [
               MovieDetailCoverWidget(movie: movie),
-              MovieDetailAboutWidget(movie: movie)
+              MovieDetailAboutWidget(movie: movie),
             ],
           );
         },
