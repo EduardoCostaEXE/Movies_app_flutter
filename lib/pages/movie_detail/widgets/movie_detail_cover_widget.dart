@@ -11,7 +11,7 @@ class MovieDetailCoverWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      expandedHeight: 300,
+      expandedHeight: 500,
       stretch: true,
       flexibleSpace: FlexibleSpaceBar(
         background: Stack(
@@ -22,12 +22,15 @@ class MovieDetailCoverWidget extends StatelessWidget {
               fit: BoxFit.cover,
             ),
             Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: Colors.white,
                 gradient: LinearGradient(
                   begin: FractionalOffset.topCenter,
                   end:  FractionalOffset.bottomCenter,
-                  colors: [Colors.black26, Colors.black87],
+                    colors: [
+                      Color(0xFF15173D).withOpacity(0.4),
+                      Color(0xFF15173D).withOpacity(1.0),
+                    ],
                   stops: [0.5, 1.0]
                 )
               ),
