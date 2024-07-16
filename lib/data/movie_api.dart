@@ -6,7 +6,7 @@ class MovieApi {
     BaseOptions(baseUrl: 'https://api.themoviedb.org/3'),
   );
 
-  final String apiKey = '42c9e433f49c9956a59378574f5ef333';
+  final String apiKey = 'apiKey';
 
   Future<List<Movie>> getMovies() async {
     var response = await _dio.get('/movie/popular', queryParameters: {
