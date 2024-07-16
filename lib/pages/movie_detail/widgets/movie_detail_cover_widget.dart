@@ -28,10 +28,10 @@ class MovieDetailCoverWidget extends StatelessWidget {
                   begin: FractionalOffset.topCenter,
                   end:  FractionalOffset.bottomCenter,
                     colors: [
-                      Color(0xFF15173D).withOpacity(0.4),
+                      Color(0xFF15173D).withOpacity(0.0),
                       Color(0xFF15173D).withOpacity(1.0),
                     ],
-                  stops: [0.5, 1.0]
+                  stops: [0.3, 1.0]
                 )
               ),
             ),

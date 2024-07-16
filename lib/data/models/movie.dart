@@ -22,7 +22,6 @@ class Movie {
   String get formattedReleaseDate => DateFormat('dd/MM/yyyy').format(releaseDate);
 
   factory Movie.fromJson(Map<String, dynamic> json) {
-    print('Movie loaded: ${json['title']}, Genre IDs: ${json['genre_ids']}');
     return Movie(
       id: json['id'],
       title: json['title'],

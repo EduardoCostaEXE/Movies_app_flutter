@@ -33,12 +33,6 @@ class _MovieListPageState extends State<MovieListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Movie App'),
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.search)
-          )
-        ],
       ),
       body: StreamBuilder<List<Genre>>(
         stream: controller.genresStream,
